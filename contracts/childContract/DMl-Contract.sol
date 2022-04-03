@@ -1,22 +1,20 @@
 // SPDX-License-Identifier: MIT
 
-
-// Verison 1.3 ;
-
 pragma solidity ^0.8.7;
-
-contract artistDB{
+import './BuyAsNFT.sol';
+contract artistDB is BuyAsNFT{
 
     address public user;
-
+    
     constructor(){
         user = msg.sender;
-    }
+    }   
     // here we got the user who called the contract ;
 
     //  we now need to declared dataStructures ;
 
     struct MetaData{
+        uint256 _id;
         string ArtistName ;
         string SongName;
         string CoverURL;
@@ -51,8 +49,8 @@ contract artistDB{
     // # make this function private 
     // # make it Upload
     // push songName parameter to the front 
-    function Upload(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256  _ReleaseDate,uint256  _TrackLength,string memory _Genre) private {
-        MetaData memory meta = MetaData(_Artist,_SongName,_CoverURL,_TrackURL,_TrackLength,_ReleaseDate,msg.sender);
+    function Upload(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256  _ReleaseDate,uint256  _TrackLength,string memory _Genre,uint256 _nftPrice,uint256 _nftCount) private {
+        MetaData memory meta = MetaData(id,_Artist,_SongName,_CoverURL,_TrackURL,_TrackLength,_ReleaseDate,msg.sender);
        
         song[id] = meta;
 
@@ -61,6 +59,9 @@ contract artistDB{
         Artist[_Artist].push(_SongName);
         
         exploreSong[_Genre].push(_SongName);
+        // let make it static for test purpose 
+        // price = 1 ether 
+        ListingPrice(_nftPrice,id,msg.sender,_nftCount);
         
         id++;
     }
@@ -71,8 +72,9 @@ contract artistDB{
 
 //  Uploading a songs to SmartContract 
     // # make it UploadSong
-    function UploadSong(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256 _ReleaseDate,uint256 _TrackLength,string memory _Genre)public {
-        Upload(_Artist,_SongName,_CoverURL,_TrackURL,_ReleaseDate,_TrackLength,_Genre);
+    function UploadSong(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256 _ReleaseDate,uint256 _TrackLength,string memory _Genre,uint256 _nftPrice,uint256 _nftCount)public {
+        // require(msg.sender == walletAd,"Connect with Corret wallet");
+        Upload(_Artist,_SongName,_CoverURL,_TrackURL,_ReleaseDate,_TrackLength,_Genre,_nftPrice,_nftCount);
     }
 
     // functilonality ## SEARCH ##
@@ -95,9 +97,13 @@ contract artistDB{
     function NewlyRealsed()public view returns (uint){
         return id;
     }
+    function BuyNFT(uint256 id , address walletAd) public payable{
+        require(msg.sender == walletAd,"Connect with Corret wallet");
+        BuyTrack(walletAd,id);
+    }
 
-    function BuyAsNFT()public {
-
+    function GetListOfNFTOWned()public view returns (uint256[] memory){
+        return GetListOfNFTOwned();
     }
 
 }

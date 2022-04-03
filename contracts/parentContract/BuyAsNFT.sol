@@ -14,7 +14,7 @@ contract BuyAsNFT{
         address CreatorsWallet;
     }
 
-    constructor()public payable{
+    constructor(){
     }
     //  basicially what this mapping does is this maps outs the Owners of NFt
     mapping (uint256 => address[] )private NFTOwners;
