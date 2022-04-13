@@ -12,6 +12,7 @@ contract BuyAsNFT{
         uint256 TokenValue;
         address[] WalletAd;
         address CreatorsWallet;
+        string[] mailAddress;
     }
 
     constructor(){
@@ -38,18 +39,18 @@ contract BuyAsNFT{
     }
 
     event showNFTAvaiable(uint256 nft);
-    function BuyTrack(address BuyersAdd,uint256 _id)public payable returns (bool) {
+    function BuyTrack(address BuyersAdd,uint256 _id,string memory email)public payable returns (bool) {
         emit showNFTAvaiable(NFT_structure[_id].NFTCount);
         require(NFT_structure[_id].NFTCount <= NFT_structure[_id].TotalCount,"NFT are Sold-out");
         require(msg.value >=  NFT_structure[_id].TokenValue,"not enough ether");
 
         (bool sent, bytes memory data) = NFT_structure[_id].CreatorsWallet.call{value: msg.value}("");
             require(sent, "Failed to send Ether");
-                NFT_structure[_id].NFTCount = NFT_structure[_id].NFTCount+1 ;
-                NFT_structure[_id].WalletAd.push(BuyersAdd);    
-
+                NFT_structure[_id].NFTCount = NFT_structure[_id].NFTCount + 1 ;
+                NFT_structure[_id].WalletAd.push(BuyersAdd);
                 NFTOwners[_id].push(BuyersAdd);
                 ListNFT[msg.sender].push(_id);
+                NFT_structure[_id].mailAddress.push(email);
             return true;
     }
 

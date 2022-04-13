@@ -19,7 +19,7 @@ contract artistDB is BuyAsNFT{
         string SongName;
         string CoverURL;
         string ArtURL;
-        uint Length;
+        string Length;
         uint TimeStamp;
         address Owner;
     }
@@ -49,7 +49,7 @@ contract artistDB is BuyAsNFT{
     // # make this function private 
     // # make it Upload
     // push songName parameter to the front 
-    function Upload(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256  _ReleaseDate,uint256  _TrackLength,string memory _Genre,uint256 _nftPrice,uint256 _nftCount) private {
+    function Upload(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256  _ReleaseDate,string memory  _TrackLength,string memory _Genre,uint256 _nftPrice,uint256 _nftCount) private {
         MetaData memory meta = MetaData(id,_Artist,_SongName,_CoverURL,_TrackURL,_TrackLength,_ReleaseDate,msg.sender);
        
         song[id] = meta;
@@ -72,7 +72,7 @@ contract artistDB is BuyAsNFT{
 
 //  Uploading a songs to SmartContract 
     // # make it UploadSong
-    function UploadSong(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256 _ReleaseDate,uint256 _TrackLength,string memory _Genre,uint256 _nftPrice,uint256 _nftCount)public {
+    function UploadSong(string memory _Artist,string memory _SongName,string memory _CoverURL,string memory _TrackURL,uint256 _ReleaseDate,string memory _TrackLength,string memory _Genre,uint256 _nftPrice,uint256 _nftCount)public {
         // require(msg.sender == walletAd,"Connect with Corret wallet");
         Upload(_Artist,_SongName,_CoverURL,_TrackURL,_ReleaseDate,_TrackLength,_Genre,_nftPrice,_nftCount);
     }
@@ -97,13 +97,17 @@ contract artistDB is BuyAsNFT{
     function NewlyRealsed()public view returns (uint){
         return id;
     }
-    function BuyNFT(uint256 id , address walletAd) public payable{
+    function BuyNFT(uint256 id , address walletAd ,string memory emails) public payable{
         require(msg.sender == walletAd,"Connect with Corret wallet");
-        BuyTrack(walletAd,id);
+        BuyTrack(walletAd,id,emails);
     }
 
     function GetListOfNFTOWned()public view returns (uint256[] memory){
         return GetListOfNFTOwned();
+    }
+
+    function getSongById(uint256 _id)public view returns (MetaData memory){
+        return song[_id];
     }
 
 }

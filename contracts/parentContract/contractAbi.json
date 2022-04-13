@@ -32,6 +32,11 @@
 				"internalType": "uint256",
 				"name": "_id",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
 			}
 		],
 		"name": "BuyTrack",
@@ -122,6 +127,11 @@
 						"internalType": "address",
 						"name": "CreatorsWallet",
 						"type": "address"
+					},
+					{
+						"internalType": "string[]",
+						"name": "mailAddress",
+						"type": "string[]"
 					}
 				],
 				"internalType": "struct BuyAsNFT.NFT",
