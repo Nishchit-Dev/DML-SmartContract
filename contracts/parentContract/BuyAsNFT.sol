@@ -42,7 +42,7 @@ contract BuyAsNFT{
     function BuyTrack(address BuyersAdd,uint256 _id,string memory email)public payable returns (bool) {
         emit showNFTAvaiable(NFT_structure[_id].NFTCount);
         require(NFT_structure[_id].NFTCount <= NFT_structure[_id].TotalCount,"NFT are Sold-out");
-        require(msg.value >=  NFT_structure[_id].TokenValue,"not enough ether");
+        require(msg.value <  NFT_structure[_id].TokenValue,"not enough ether");
 
         (bool sent, bytes memory data) = NFT_structure[_id].CreatorsWallet.call{value: msg.value}("");
             require(sent, "Failed to send Ether");
